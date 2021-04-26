@@ -1,8 +1,6 @@
 from PIL import Image
 from pytesseract import pytesseract
-
-
-
+from receipt_item import ReceiptItem
 
 
 class ReceiptParser:
@@ -23,10 +21,12 @@ class ReceiptParser:
         newline_list = text.split('\n')
         return list(filter(lambda item: not ' x ' in item, newline_list))
 
-    def create_item_dictionary(self, item_list):
+    @staticmethod
+    def create_item_dictionary(item_list):
         new_list = []
         for item in item_list:
-            new_list.append(item.rsplit(' ', 1))
+            split_string = tuple(item.rsplit(' ', 1))
+            new_list.append(ReceiptItem(split_string[0], split_string[1]))
         return new_list
 
     def process_to_dictionary(self, text):
@@ -36,7 +36,6 @@ class ReceiptParser:
         item_list = self.create_item_list(text_corrected)
         item_dictionary = self.create_item_dictionary(item_list)
         print(item_dictionary)
-
 
     def parse_receipt(self, image_name):
         image_full_path = self.image_dir + image_name
@@ -48,6 +47,3 @@ class ReceiptParser:
 
         text = pytesseract.image_to_string(image)
         self.process_to_dictionary(text)
-
-
-
