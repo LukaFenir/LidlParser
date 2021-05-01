@@ -1,6 +1,7 @@
 from PIL import Image
 from pytesseract import pytesseract
 from receipt_item import ReceiptItem
+import re
 
 
 class ReceiptParser:
@@ -14,12 +15,12 @@ class ReceiptParser:
 
     @staticmethod
     def trim_receipt(text):
-        return text.split('Copy\n\n£\n')[1].split('\n\n*CUSTOMER COPY* - PLEASE RETAIN RECEIPT')[0]
+        return re.split('[\n]*\*CUSTOMER COPY\* - PLEASE RETAIN RECEIPT', re.split('Copy[\n]*£[\n]*',text)[1])[0]
 
     @staticmethod
     def create_item_list(text):
         newline_list = text.split('\n')
-        return list(filter(lambda item: not ' x ' in item, newline_list))
+        return list(filter(lambda item: (not '£' in item) and (not 'CARD' in item), newline_list))
 
     @staticmethod
     def create_item_dictionary(item_list):

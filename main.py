@@ -1,7 +1,7 @@
 from typing import List
 
 from config import Config
-from image_parser import ReceiptParser
+from receipt_parser import ReceiptParser
 from receipt_item import ReceiptItem
 
 
