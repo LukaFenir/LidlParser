@@ -11,7 +11,7 @@ class ReceiptParser:
 
     @staticmethod
     def correct_mistakes(text):
-        return text.replace('@', '0').replace(' A', '').replace(' B', '')
+        return text.replace('@', '0').replace(' A', '').replace(' B', '').replace('Q0', '0')
 
     @staticmethod
     def trim_receipt(text):
@@ -27,7 +27,7 @@ class ReceiptParser:
         new_list = []
         for item in item_list:
             split_string = tuple(item.rsplit(' ', 1))
-            new_list.append(ReceiptItem(split_string[0], split_string[1]))
+            new_list.append(ReceiptItem(split_string[0], float(split_string[1])))
         return new_list
 
     def process_to_dictionary(self, text):
