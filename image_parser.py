@@ -35,7 +35,7 @@ class ReceiptParser:
         # print(text_corrected[:-1])
         item_list = self.create_item_list(text_corrected)
         item_dictionary = self.create_item_dictionary(item_list)
-        print(item_dictionary)
+        return item_dictionary
 
     def parse_receipt(self, image_name):
         image_full_path = self.image_dir + image_name
@@ -46,4 +46,4 @@ class ReceiptParser:
         pytesseract.tesseract_cmd = self.tesseract_path
 
         text = pytesseract.image_to_string(image)
-        self.process_to_dictionary(text)
+        return self.process_to_dictionary(text)
