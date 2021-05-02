@@ -1,7 +1,7 @@
 import unittest
 from typing import List
 
-from receipt_item import ReceiptItem
+from parsed_receipt import ParsedReceipt
 from receipt_parser import ReceiptParser
 from tests.test_config import TestConfig
 
@@ -16,22 +16,15 @@ class TestReceiptParser(unittest.TestCase):
         valid_receipt = "valid_lidl_receipt.jpg"
 
         # When
-        receipt_items: List[ReceiptItem] = image_parser.parse_receipt(valid_receipt)
+        parsed_receipt: ParsedReceipt = image_parser.parse_receipt(valid_receipt)
+        receipt_items: List[ParsedReceipt.ReceiptItem] = parsed_receipt.items
         print(receipt_items)
 
-        #TODO Make object with TOTAL as a property
-        receipt_items.pop()
-
         # Then
+        self.assertEqual(parsed_receipt.total, 41.91)
         self.assertIsNotNone(receipt_items)
         self.assertEqual(len(receipt_items), 34)
-        #TODO
-        # self.assertEqual(receipt_items.total, 41.91)
         self.assertEqual(receipt_items[0].name, "PF Compost 201")
         self.assertEqual(receipt_items[0].price, 0.99)
 
     # def test_invalid_receipt(self):
-
-
-if __name__ == '__main__':
-    unittest.main()

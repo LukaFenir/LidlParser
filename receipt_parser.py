@@ -1,6 +1,8 @@
+from typing import List
+
 from PIL import Image
 from pytesseract import pytesseract
-from receipt_item import ReceiptItem
+from parsed_receipt import ParsedReceipt
 import re
 
 
@@ -15,7 +17,7 @@ class ReceiptParser:
 
     @staticmethod
     def trim_receipt(text):
-        return re.split('[\n]*\*CUSTOMER COPY\* - PLEASE RETAIN RECEIPT', re.split('Copy[\n]*£[\n]*',text)[1])[0]
+        return re.split('[\n]*\*CUSTOMER COPY\* - PLEASE RETAIN RECEIPT', re.split('Copy[\n]*£[\n]*', text)[1])[0]
 
     @staticmethod
     def create_item_list(text):
@@ -23,20 +25,18 @@ class ReceiptParser:
         return list(filter(lambda item: (not '£' in item) and (not 'CARD' in item), newline_list))
 
     @staticmethod
-    def create_item_dictionary(item_list):
-        new_list = []
-        for item in item_list:
-            split_string = tuple(item.rsplit(' ', 1))
-            new_list.append(ReceiptItem(split_string[0], float(split_string[1])))
-        return new_list
+    def create_parsed_receipt(item_list):
+        total_string = item_list.pop()
+        new_receipt = ParsedReceipt(item_list, total_string)
+        return new_receipt
 
-    def process_to_dictionary(self, text):
+    def parse_and_touch_up(self, text):
         text_trimmed = self.trim_receipt(text)
         text_corrected = self.correct_mistakes(text_trimmed)
         # print(text_corrected[:-1])
-        item_list = self.create_item_list(text_corrected)
-        item_dictionary = self.create_item_dictionary(item_list)
-        return item_dictionary
+        item_list: List[str] = self.create_item_list(text_corrected)
+        parsed_receipt: ParsedReceipt = self.create_parsed_receipt(item_list)
+        return parsed_receipt
 
     def parse_receipt(self, image_name):
         image_full_path = self.image_dir + image_name
@@ -47,4 +47,4 @@ class ReceiptParser:
         pytesseract.tesseract_cmd = self.tesseract_path
 
         text = pytesseract.image_to_string(image)
-        return self.process_to_dictionary(text)
+        return self.parse_and_touch_up(text)
