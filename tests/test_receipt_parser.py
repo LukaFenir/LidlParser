@@ -7,6 +7,10 @@ from tests.test_config import TestConfig
 
 
 class TestReceiptParser(unittest.TestCase):
+
+    def test_init(self):
+        print('Testing: ReceiptParser can parse images')
+
     def test_valid_receipt(self):
         """
         Test that a Lidl receipt can be parsed
@@ -18,7 +22,6 @@ class TestReceiptParser(unittest.TestCase):
         # When
         parsed_receipt: ParsedReceipt = image_parser.parse_receipt(valid_receipt)
         receipt_items: List[ParsedReceipt.ReceiptItem] = parsed_receipt.items
-        print(receipt_items)
 
         # Then
         self.assertEqual(parsed_receipt.total, 41.91)

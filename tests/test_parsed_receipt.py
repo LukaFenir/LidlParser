@@ -6,6 +6,9 @@ from parsed_receipt import ParsedReceipt
 
 class TestParsedReceipt(unittest.TestCase):
 
+    def test_init(self):
+        print('Testing: ParsedReceipt object creation')
+
     def test_parse_receipt_with_no_items(self):
         # Given
         items: List[str] = []

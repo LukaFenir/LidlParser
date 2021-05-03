@@ -1,4 +1,4 @@
 class Config:
-    IMAGE_DIRECTORY = 'D:\\Luka\\Pictures\\Lidl_Receipts\\'
+    IMAGE_DIRECTORY = '<Path to where images will be uploaded>'
 
-    TESSERACT_EXE_PATH = 'D:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+    TESSERACT_EXE_PATH = '<Path to Tesseract executable - see UB Mannheim>'
